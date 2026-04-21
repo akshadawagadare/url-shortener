@@ -22,12 +22,13 @@ router.post("/shorten", async (req, res) => {
       return res.status(400).json({ message: "Invalid URL" });
     }
 
-    // Check if URL lready exists
+    // Check if URL already exists
     const existingUrl = await Url.findOne({ originalUrl });
 
     if (existingUrl) {
       return res.json({
-        shortUrl: `http://localhost:5000/${existingUrl.shortCode}`
+        shortUrl: `http://localhost:5000/${existingUrl.shortCode}`,
+        expiresAt: existingUrl.expiresAt
       });
     }
 
