@@ -1,62 +1,160 @@
-# URL Shortener
+# Snaplink 🔗
 
-A full-stack URL shortener with link expiry, click tracking, and analytics.
+A fast and minimal URL shortener built with React, Node.js/Express, and MongoDB.
 
-## Features
-
-- Shorten any valid URL instantly
-- Automatic duplicate detection
-- Set custom expiry in days for each link
-- Click tracking on every redirect
-- Analytics endpoint with click count and creation date
-- Responsive UI built with React and Tailwind CSS
+---
 
 ## Tech Stack
 
-**Frontend:** React.js, Tailwind CSS  
+**Frontend:** React, JavaScript, CSS  
 **Backend:** Node.js, Express.js  
-**Database:** MongoDB Atlas  
+**Database:** MongoDB  
+
+---
+
+## Features
+
+- 🔗 Shorten long URLs instantly
+- 📋 Copy short links with one click
+- 🚀 Fast redirects
+- 📊 Click tracking & analytics per link
+- ⏳ Optional link expiration (set expiry in days)
+- ✅ URL validation before saving
+- 🔁 Duplicate detection — same URL returns the existing short link
+- 💾 Persistent storage with MongoDB
+
+---
+
+## Project Structure
+
+```
+snaplink/
+├── backend/
+│   ├── routes/
+│   │   └── urlRoutes.js
+│   ├── models/
+│   ├── .env
+│   └── server.js
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   └── Snaplink/
+│   │   ├── pages/
+│   │   │   └── HomePage.jsx
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   └── package.json
+└── README.md
+```
+
+---
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js installed
-- MongoDB Atlas account
 
-### Installation
+- Node.js v18+
+- MongoDB (local or Atlas)
 
-1. Clone the repository
+### 1. Clone the repository
+
 ```bash
-   git clone https://github.com/akshadawagadare/url-shortener.git
+git clone https://github.com/akshadawagadare/snaplink.git
+cd snaplink
 ```
 
-2. Setup Backend
+### 2. Setup Backend
+
 ```bash
-   cd backend
-   npm install
+cd backend
+npm install
 ```
 
-3. Create a `.env` file in backend folder
-MONGO_URI=your_mongodb_atlas_connection_string
+Create a `.env` file in the `backend/` folder:
+
+```env
 PORT=5000
-4. Start Backend
-```bash
-   npm start
+MONGO_URI=your_mongodb_connection_string
+BASE_URL=http://localhost:5000
 ```
 
-5. Setup Frontend
+Start the backend server:
+
 ```bash
-   cd frontend
-   npm install
-   npm run dev
+npm start
 ```
 
-6. Open `http://localhost:5173` in your browser
+### 3. Setup Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The app will be running at `http://localhost:5173`
+
+---
+
+## Environment Variables
+
+| Variable | Description |
+|---|---|
+| `PORT` | Port for the backend server |
+| `MONGO_URI` | MongoDB connection string |
+| `BASE_URL` | Base URL used for generating short links |
+
+---
 
 ## API Endpoints
 
 | Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/shorten` | Create a short URL |
-| GET | `/:shortCode` | Redirect to original URL |
-| GET | `/analytics/:shortCode` | Get click analytics |
+|---|---|---|
+| `POST` | `/api/url/shorten` | Create a short URL |
+| `GET` | `/api/url/analytics/:shortCode` | Get analytics for a short URL |
+| `GET` | `/:shortCode` | Redirect to the original URL |
+
+### POST `/api/url/shorten`
+
+**Request Body:**
+```json
+{
+  "originalUrl": "https://example.com/very-long-url",
+  "expiresInDays": 7
+}
+```
+
+> `expiresInDays` is optional. Omit it for a link that never expires.
+
+**Response:**
+```json
+{
+  "shortUrl": "http://localhost:5000/aB3xY",
+  "expiresAt": "2024-02-01T00:00:00.000Z"
+}
+```
+
+### GET `/api/url/analytics/:shortCode`
+
+**Response:**
+```json
+{
+  "originalUrl": "https://example.com/very-long-url",
+  "shortCode": "aB3xY",
+  "clicks": 42,
+  "createdAt": "2024-01-25T00:00:00.000Z",
+  "expiresAt": "2024-02-01T00:00:00.000Z"
+}
+```
+
+---
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first.
+
+---
+
+## License
+
+[MIT](LICENSE)
